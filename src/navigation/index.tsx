@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import AuthStack from './stacks/AuthStack';
 import AppStack from './stacks/AppStack';
 import { Loading } from '../components/Loading';
-import { loginStatus } from '../store/redux/actions/AuthActions';
+import { loginStatus } from '../store/slices/authSlice';
 import { UserBody } from 'models/user';
 
 const Routes: FC = () => {
@@ -16,6 +16,7 @@ const Routes: FC = () => {
 
   const onAuthStateChanged = authUser => {
     setUser(authUser);
+    console.log(authUser);
     dispatch(loginStatus(authUser));
     if (loading) {
       setLoading(false);

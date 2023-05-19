@@ -44,6 +44,7 @@ export const getUser =
 export const handleUpdate =
   (userUid: string, userData: UserProfile, image: string) =>
   async (dispatch: Dispatch) => {
+    console.log('handleUpdate userData', userData, userUid, image);
     try {
       dispatch({
         type: USER_LOADING,

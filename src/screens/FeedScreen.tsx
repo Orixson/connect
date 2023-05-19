@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Container } from '@styles/FeedStyles';
 import { PostCard, ShimmerEffect } from 'components';
-import { getPosts, deletePost } from '@store/redux/actions/FeedActions';
+import { getPosts, deletePost } from '@store/slices/feedSlice';
 import { PostBody } from 'models/post';
 import { UserBody } from 'models/user';
 import { NavigationProp } from '@react-navigation/core';
@@ -28,7 +28,7 @@ type FeedScreenType = {
 const FeedScreen: FC<FeedScreenType> = () => {
   const { navigate } = useNavigation<AppScreenNavigationProp>();
   const dispatch = useDispatch();
-  const posts = useSelector(state => state.feed.posts);
+  const posts = useSelector(state => state.feed.data);
   const loading = useSelector(state => state.feed.loading);
   const user = useSelector(state => state.auth.user);
 

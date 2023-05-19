@@ -20,20 +20,22 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { FormButton } from 'components';
-import { handleUpdate } from 'store/redux/actions/UserActions';
 import { totalSize } from 'utils/Dimentions';
 import { Loading } from 'components/Loading';
+import { UserProfile } from 'models/userProfile';
+import { handleUpdate } from 'store/slices/userUpdateSlice';
 
 type EditProfileScreenType = {};
 
 const EditProfileScreen: FC<EditProfileScreenType> = () => {
   const user = useSelector(state => state.auth.user);
-  const userProfile = useSelector(state => state.userProfile.data);
-  const loading = useSelector(state => state.userProfile.loading);
+  const userProfile = useSelector(state => state.user.data);
+  const loading = useSelector(state => state.user.loading);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState<string>();
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<UserProfile>();
+  console.log('userProfile', userProfile);
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);

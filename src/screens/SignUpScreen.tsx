@@ -13,11 +13,7 @@ import { NavigationProp } from '@react-navigation/core';
 import { AUTH_ROUTES } from '@navigation/stacks/AuthStack';
 
 import { FormButton, FormInput, SocialButton } from 'components';
-import {
-  register,
-  fbLogin,
-  googleLogin,
-} from 'store/redux/actions/AuthActions';
+import { register, fbLogin, googleLogin } from 'store/slices/authSlice';
 import { totalSize } from 'utils/Dimentions';
 import { emailRegEx } from 'utils/Constants';
 import { Color } from 'utils/Color';

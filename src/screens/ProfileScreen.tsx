@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { PostCard } from 'components';
-import { selfPosts } from 'store/redux/actions/SelfPostsAction';
 import { logout } from 'store/redux/actions/AuthActions';
-import { getUser } from 'store/redux/actions/UserActions';
-import { deletePost } from 'store/redux/actions/FeedActions';
+import { getUser, selectUser } from 'store/slices/userSlice';
+import { deletePost } from 'store/slices/deletePostSlice';
 import { Loading } from 'components/Loading';
 import { NavigationProp } from '@react-navigation/core';
 import {
@@ -22,6 +21,7 @@ import {
   AppStackParams,
 } from 'navigation/types/appStackTypes';
 import { PROFILE_ROUTES } from 'navigation/stacks/AppStack';
+import { fetchSelfPosts } from 'store/slices/selfPostsSlice';
 
 type ProfileScreenType = {
   navigation: NavigationProp<AppStackParams>;
@@ -32,21 +32,23 @@ const ProfileScreen: FC<ProfileScreenType> = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const userLoading = useSelector(state => state.auth.loading);
-  const posts = useSelector(state => state.selfposts.posts);
-  const postsLoading = useSelector(state => state.selfposts.loading);
-  const userProfile = useSelector(state => state.userProfile.data);
-  const userProfileLoading = useSelector(state => state.userProfile.loading);
+  const posts = useSelector(state => state.selfPosts.posts);
+  const postsLoading = useSelector(state => state.selfPosts.loading);
+  const userProfile = useSelector(selectUser);
+  const userProfileLoading = useSelector(state => state.user.loading);
   const deleted = useSelector(state => state.feed.deleted);
   const deletedLoading = useSelector(state => state.feed.loading);
+  console.log('userProfile, user', user, userProfile);
+  const userUpdateLoading = useSelector(state => state.userUpdate.loading);
 
   useEffect(() => {
+    dispatch(fetchSelfPosts({ route, user }));
     dispatch(getUser(route, user));
-    dispatch(selfPosts(route, user));
   }, [deleted]);
 
   const refresh = () => {
     dispatch(getUser(route, user));
-    dispatch(selfPosts(route, user));
+    dispatch(fetchSelfPosts({ route, user }));
   };
 
   const profile = () => {
@@ -56,7 +58,7 @@ const ProfileScreen: FC<ProfileScreenType> = ({ route, navigation }) => {
           style={styles.userImg}
           source={{
             uri:
-              userProfile.userImg ||
+              userProfile?.userImg ||
               'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
           }}
         />
@@ -124,7 +126,7 @@ const ProfileScreen: FC<ProfileScreenType> = ({ route, navigation }) => {
         },
         {
           text: 'Confirm',
-          onPress: () => dispatch(deletePost(postId)),
+          onPress: () => dispatch(deletePost({ postId })),
         },
       ],
       { cancelable: false },
