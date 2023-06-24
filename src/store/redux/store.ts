@@ -18,6 +18,8 @@ import userUpdateReducer from '../slices/userUpdateSlice';
 
 // export const store = createStore(reducers, applyMiddleware(ReduxThunk));
 
+const createDebugger = require('redux-flipper').default;
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -28,8 +30,12 @@ export const store = configureStore({
     addPost: addPostReducer,
     deletePost: deletePostReducer,
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  middleware: getDefaultMiddleware => {
+    const middlewares = getDefaultMiddleware({
+      serializableCheck: false,
+    });
+    return __DEV__ ? middlewares.concat(createDebugger()) : middlewares;
+  },
 });
 
 // import { createStore, applyMiddleware } from 'redux';
